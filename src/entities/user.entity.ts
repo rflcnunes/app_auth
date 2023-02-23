@@ -27,15 +27,20 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ nullable: false })
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamp',
+  })
   createdDate: Date;
 
-  @Column({ nullable: true })
-  @UpdateDateColumn()
+  @UpdateDateColumn({
+    type: 'timestamp',
+    nullable: true,
+  })
   updatedDate: Date;
 
-  @Column({ nullable: true })
-  @DeleteDateColumn()
+  @DeleteDateColumn({
+    type: 'timestamp',
+    nullable: true,
+  })
   deletedDate: Date;
 }
