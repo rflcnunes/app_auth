@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   DeleteDateColumn,
   UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity('users')
@@ -27,13 +28,14 @@ export class User {
   isActive: boolean;
 
   @Column({ nullable: false })
-  createdAt: Date;
+  @CreateDateColumn()
+  createdDate: Date;
 
   @Column({ nullable: true })
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedDate: Date;
 
   @Column({ nullable: true })
   @DeleteDateColumn()
-  deletedAt: Date;
+  deletedDate: Date;
 }

@@ -21,7 +21,6 @@ export class UsersService {
       lastName: createUserDto.lastName,
       email: createUserDto.email,
       password: hashedPassword,
-      createdAt: new Date(),
     });
 
     await this.userRepository.save(user);
