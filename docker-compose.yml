@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: node
+    container_name: app_node
     restart: always
     ports:
       - ${NODE_PORT}:3030
@@ -19,10 +19,10 @@ services:
       - DB_DATABASE=${DB_DATABASE}
       - PORT=${NODE_PORT}
     networks:
-      - todo_network
+      - app_network
   db:
     image: mysql
-    container_name: mysql
+    container_name: app_mysql_db
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -31,20 +31,21 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
     networks:
-      - todo_network
+      - app_network
 
   adminer:
     image: adminer
+    container_name: app_mysql_db_adminer
     restart: always
     ports:
       - 8080:8080
     networks:
-      - todo_network
+      - app_network
 
 volumes:
   node:
     driver: local
 
 networks:
-  todo_network:
+  app_network:
     driver: bridge
