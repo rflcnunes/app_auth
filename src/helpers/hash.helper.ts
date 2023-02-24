@@ -5,8 +5,11 @@ const hashWithBcrypt = async (password: string): Promise<string> => {
   return hashedPassword;
 };
 
-const checkPassword = (password: string, hashedPassword: string): boolean => {
-  return compareSync(password, hashedPassword);
+const checkPassword = async (
+  password: string,
+  hashedPassword: string,
+): Promise<boolean> => {
+  return await compareSync(password, hashedPassword);
 };
 
 export const HashHelper = {
