@@ -38,7 +38,8 @@ export class AuthService {
   }
 
   async getUserFromToken(token: string): Promise<User> {
-    const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
+    const tokenWithoutPrefix = token.replace(/^(Bearer )/, '');
+    const decodedToken = this.jwtService.verify(tokenWithoutPrefix);
     const user = await this.usersService.findOne(decodedToken.sub);
     return user;
   }
