@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { HashHelper } from 'src/helpers/hash.helper';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -34,5 +35,11 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
 
     return { token };
+  }
+
+  async getUserFromToken(token: string): Promise<User> {
+    const decodedToken = this.jwtService.verify(token.replace('Bearer ', ''));
+    const user = await this.usersService.findOne(decodedToken.sub);
+    return user;
   }
 }

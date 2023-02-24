@@ -14,4 +14,13 @@ export class AppController {
   async login(@Request() req) {
     return this.authService.login(req.body);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('auth/check/token')
+  async checkToken(@Request() req) {
+    const user = await this.authService.getUserFromToken(
+      req.headers.authorization,
+    );
+    return user;
+  }
 }
