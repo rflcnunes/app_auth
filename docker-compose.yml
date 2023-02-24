@@ -18,7 +18,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_DATABASE=${DB_DATABASE}
       - PORT=${NODE_PORT}
-      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
     networks:
       - app_network
   db:
