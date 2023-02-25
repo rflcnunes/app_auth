@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
@@ -40,12 +41,8 @@ export class AppController {
     return this.authService.getUserFromToken(token);
   }
 
-  @Get('send')
-  async sendMessage(): Promise<string> {
-    const message = await this.rabbitmqService.sendMessage(
-      'Hello from RabbitMQ!',
-    );
-    console.log('Message sent', message);
-    return 'Message sent';
+  @Post('send')
+  async sendMessage(@Body() body: { queue: string; message: any }) {
+    return this.rabbitmqService.sendMessage(body.queue, body.message);
   }
 }

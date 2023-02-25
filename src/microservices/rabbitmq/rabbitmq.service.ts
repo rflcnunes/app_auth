@@ -1,21 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { MessagePattern, ClientProxy } from '@nestjs/microservices';
-import { Inject } from '@nestjs/common';
-import { Client } from 'amqplib';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
+import {
+  ClientProxy,
+  ClientProxyFactory,
+  Transport,
+} from '@nestjs/microservices';
 
 @Injectable()
-export class RabbitmqService {
-  constructor(
-    @Inject('RABBITMQ_SERVICE') private readonly client: ClientProxy,
-  ) {}
+export class RabbitmqService implements OnModuleDestroy {
+  private client: ClientProxy;
 
-  async sendMessage(message: string) {
-    return this.client.emit('message', message);
+  async sendMessage(queue: string, message: any): Promise<any> {
+    this.client = ClientProxyFactory.create({
+      transport: Transport.RMQ,
+      options: {
+        urls: [
+          `amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`,
+        ],
+        queue: queue,
+      },
+    });
+
+    await this.client.connect();
+
+    try {
+      await this.client.emit('message', message).toPromise();
+      console.log(`Sent message to queue "${queue}":`, message);
+    } catch (error) {
+      console.error(`Failed to send message to queue "${queue}":`, error);
+    } finally {
+      await this.client.close();
+    }
   }
 
-  @MessagePattern('message')
-  async getMessage(message: string): Promise<string> {
-    console.log('Message received', message);
-    return message;
+  async onModuleDestroy() {
+    if (this.client) {
+      await this.client.close();
+    }
   }
 }
