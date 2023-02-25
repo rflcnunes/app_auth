@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { User } from './entities/user.entity';
 import { UsersModule } from './app/users/users.module';
 import { AuthModule } from './app/auth/auth.module';
+import { RabbitmqModule } from './microservices/rabbitmq/rabbitmq.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthModule } from './app/auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    RabbitmqModule,
   ],
   controllers: [AppController],
   providers: [AppService],
