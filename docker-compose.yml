@@ -21,6 +21,7 @@ services:
       - RABBITMQ_HOST=${RABBITMQ_HOST}
     networks:
       - app_network
+      - audits_network
   db:
     image: mysql
     container_name: app_mysql_db
@@ -31,19 +32,6 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
-    networks:
-      - app_network
-
-  rabbitmq:
-    image: rabbitmq:3.8-management
-    container_name: app_rabbitmq
-    restart: always
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
     networks:
       - app_network
 
@@ -63,3 +51,6 @@ volumes:
 networks:
   app_network:
     driver: bridge
+  audits_network:
+    external:
+      name: micro_audits_audits_network
